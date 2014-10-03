@@ -1,0 +1,11 @@
+[Desktop Entry]
+Categories=Office;Accesoires;Utility;Java;
+Comment=Java based Notepad
+Comment[de]=Texteditor
+Exec=datazuul-notepad
+Icon=notepad-32x32.png
+MimeType=x-directory/normal;inode/directory;
+Name=Notepad
+Name[de]=Notepad
+Terminal=false
+Type=Application

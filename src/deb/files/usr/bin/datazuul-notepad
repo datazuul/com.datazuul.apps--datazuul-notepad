@@ -1,0 +1,12 @@
+#!/bin/sh
+
+JAVA_OPTS=""
+APP_OPTS="-Duser.language=$LANG"
+
+# Include the wrappers utility script
+. /usr/lib/java-wrappers/java-wrappers.sh
+
+# We need a java6 runtime
+find_java_runtime java6
+
+exec $JAVA_HOME/bin/java $JAVA_OPTS -jar /usr/share/java/datazuul-notepad.jar $APP_OPTS "$@"

@@ -1,0 +1,9 @@
+Package: [[artifactId]]
+Version: [[version]]
+Section: misc
+Priority: optional
+Architecture: all
+Depends: java6-runtime, java-wrappers
+Maintainer: Ralf Eichinger <ralf.eichinger@ralfeichinger.com>
+Description: Datazuul Notepad - Simple text editor
+Distribution: development
