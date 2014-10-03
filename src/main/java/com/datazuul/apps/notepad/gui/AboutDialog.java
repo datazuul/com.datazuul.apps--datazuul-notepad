@@ -64,8 +64,8 @@ public class AboutDialog extends JDialog {
 	panel.setBorder(new CompoundBorder(outerBorder, innerBorder));
 
 	panel.add(new JLabel("Written by Ralf Eichinger"));
-	panel.add(new JLabel("ralf.eichinger@javapro.de"));
-	panel.add(new JLabel("http://www.javapro.de/"));
+	panel.add(new JLabel("ralf.eichinger@gmail.com"));
+	panel.add(new JLabel("http://www.datazuul.com/"));
 
 	return panel;
     }
