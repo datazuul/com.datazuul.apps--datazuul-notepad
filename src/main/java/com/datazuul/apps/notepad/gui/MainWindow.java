@@ -351,21 +351,21 @@ public class MainWindow extends JFrame implements WindowListener {
 	this.mnuItemCut.setMnemonic(KeyEvent.VK_X);
 	this.mnuItemCut.setIcon(new ImageIcon(Datazuul.class.getResource("images/Cut16.gif")));
 	this.mnuItemCut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
-	this.mnuItemCut.setEnabled(false);
+//	this.mnuItemCut.setEnabled(false);
 
 	this.mnuItemCopy = new JMenuItem(this.txtArea.getActionMap().get(DefaultEditorKit.copyAction));
 	this.mnuItemCopy.setText("Copy");
 	this.mnuItemCopy.setMnemonic(KeyEvent.VK_C);
 	this.mnuItemCopy.setIcon(new ImageIcon(Datazuul.class.getResource("images/Copy16.gif")));
 	this.mnuItemCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
-	this.mnuItemCopy.setEnabled(false);
+//	this.mnuItemCopy.setEnabled(false);
 
 	this.mnuItemPaste = new JMenuItem(this.txtArea.getActionMap().get(DefaultEditorKit.pasteAction));
 	this.mnuItemPaste.setText("Paste");
 	this.mnuItemPaste.setMnemonic(KeyEvent.VK_V);
 	this.mnuItemPaste.setIcon(new ImageIcon(Datazuul.class.getResource("images/Paste16.gif")));
 	this.mnuItemPaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
-	this.mnuItemPaste.setEnabled(false);
+//	this.mnuItemPaste.setEnabled(false);
 
 	this.mnuItemDelete = new JMenuItem("Delete");
 
