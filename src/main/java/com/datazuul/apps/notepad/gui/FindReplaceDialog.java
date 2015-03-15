@@ -155,6 +155,7 @@ public class FindReplaceDialog extends JDialog {
 
 	this.btnCancel = new JButton("Cancel");
 	this.btnCancel.addActionListener(new ActionListener() {
+            @Override
 	    public void actionPerformed(ActionEvent e) {
 		dispose();
 	    }

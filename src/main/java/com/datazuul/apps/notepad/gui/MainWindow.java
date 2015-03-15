@@ -123,6 +123,7 @@ public class MainWindow extends JFrame implements WindowListener {
 	this.mnuItemNew.setIcon(new ImageIcon(Datazuul.class.getResource("images/New16.gif")));
 	this.mnuItemNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
 	this.mnuItemNew.addActionListener(new ActionListener() {
+            @Override
 	    public void actionPerformed(ActionEvent e) {
 		if (isModified()) {
 		    switch (dialogConfirmSaveFile()) {
@@ -149,6 +150,7 @@ public class MainWindow extends JFrame implements WindowListener {
 	this.mnuItemOpen.setIcon(new ImageIcon(Datazuul.class.getResource("images/Open16.gif")));
 	this.mnuItemOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 	this.mnuItemOpen.addActionListener(new ActionListener() {
+            @Override
 	    public void actionPerformed(ActionEvent e) {
 		switch (dialogConfirmSaveFile()) {
 		case JOptionPane.YES_OPTION:
@@ -172,6 +174,7 @@ public class MainWindow extends JFrame implements WindowListener {
 	this.mnuItemSave.setIcon(new ImageIcon(Datazuul.class.getResource("images/Save16.gif")));
 	this.mnuItemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 	this.mnuItemSave.addActionListener(new ActionListener() {
+            @Override
 	    public void actionPerformed(ActionEvent e) {
 		doSave();
 	    }
@@ -182,6 +185,7 @@ public class MainWindow extends JFrame implements WindowListener {
 	// this.mnuItemSaveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
 	// ActionEvent.CTRL_MASK));
 	this.mnuItemSaveAs.addActionListener(new ActionListener() {
+            @Override
 	    public void actionPerformed(ActionEvent e) {
 		doSaveAs();
 	    }
@@ -190,6 +194,7 @@ public class MainWindow extends JFrame implements WindowListener {
 	this.mnuItemPrint = new JMenuItem("Print...", KeyEvent.VK_P);
 	this.mnuItemPrint.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
 	this.mnuItemPrint.addActionListener(new ActionListener() {
+            @Override
 	    public void actionPerformed(ActionEvent e) {
 		doPrint();
 	    }
@@ -198,6 +203,7 @@ public class MainWindow extends JFrame implements WindowListener {
 	JMenuItem mnuItemQuit = new JMenuItem("Quit", KeyEvent.VK_Q);
 	mnuItemQuit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
 	mnuItemQuit.addActionListener(new ActionListener() {
+            @Override
 	    public void actionPerformed(ActionEvent e) {
 		// Only ask the user a question if the buffer was modified
 		if (getCurrentLength() != originalLength) {
@@ -371,6 +377,7 @@ public class MainWindow extends JFrame implements WindowListener {
 
 	this.mnuItemFindReplace = new JMenuItem("Find/Replace...");
 	this.mnuItemFindReplace.addActionListener(new ActionListener() {
+            @Override
 	    public void actionPerformed(ActionEvent e) {
 		new FindReplaceDialog(mainWindow, null).setVisible(true);
 	    }
@@ -381,6 +388,7 @@ public class MainWindow extends JFrame implements WindowListener {
 
 	this.mnuItemGoTo = new JMenuItem("Go To...");
 	this.mnuItemGoTo.addActionListener(new ActionListener() {
+            @Override
 	    public void actionPerformed(ActionEvent e) {
 		String inputValue = JOptionPane.showInputDialog(mainWindow, "Line number:", "Go To Line",
 			JOptionPane.QUESTION_MESSAGE);
@@ -391,6 +399,7 @@ public class MainWindow extends JFrame implements WindowListener {
 	this.mnuItemSelectAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
 	// this.mnuItemSelectAll.setEnabled(false);
 	this.mnuItemSelectAll.addActionListener(new ActionListener() {
+            @Override
 	    public void actionPerformed(ActionEvent e) {
 		txtArea.selectAll();
 	    }
@@ -402,6 +411,7 @@ public class MainWindow extends JFrame implements WindowListener {
 	this.mnuItemTimeDate = new JMenuItem("Time/Date");
 	this.mnuItemTimeDate.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 	this.mnuItemTimeDate.addActionListener(new ActionListener() {
+            @Override
 	    public void actionPerformed(ActionEvent e) {
 		Calendar now = Calendar.getInstance();
 		int hour = now.get(Calendar.HOUR);
@@ -445,6 +455,7 @@ public class MainWindow extends JFrame implements WindowListener {
 	JCheckBoxMenuItem mnuItemWordWrap = new JCheckBoxMenuItem("Word Wrap");
 	mnuItemWordWrap.setMnemonic(KeyEvent.VK_W);
 	mnuItemWordWrap.addItemListener(new ItemListener() {
+            @Override
 	    public void itemStateChanged(ItemEvent e) {
 		txtArea.setWrapStyleWord(!txtArea.getWrapStyleWord());
 	    }
@@ -452,6 +463,7 @@ public class MainWindow extends JFrame implements WindowListener {
 
 	this.mnuItemFont = new JMenuItem("Font...");
 	this.mnuItemFont.addActionListener(new ActionListener() {
+            @Override
 	    public void actionPerformed(ActionEvent e) {
 
 	    }
@@ -459,6 +471,7 @@ public class MainWindow extends JFrame implements WindowListener {
 
 	this.mnuItemColor = new JMenuItem("Color...");
 	this.mnuItemColor.addActionListener(new ActionListener() {
+            @Override
 	    public void actionPerformed(ActionEvent e) {
 		Color fontColor = JColorChooser.showDialog(mainWindow, "Choose a font color", null);
 	    }
@@ -478,6 +491,7 @@ public class MainWindow extends JFrame implements WindowListener {
 	JCheckBoxMenuItem mnuItemStatusBar = new JCheckBoxMenuItem("Status bar", true);
 	mnuItemStatusBar.setMnemonic(KeyEvent.VK_S);
 	mnuItemStatusBar.addItemListener(new ItemListener() {
+            @Override
 	    public void itemStateChanged(ItemEvent e) {
 		statusBar.setVisible(!statusBar.isVisible());
 	    }
@@ -496,6 +510,7 @@ public class MainWindow extends JFrame implements WindowListener {
 	mnuItemHelpAbout.setIcon(new ImageIcon(Datazuul.class.getResource("images/Help16.gif")));
 	mnuItemHelpAbout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 	mnuItemHelpAbout.addActionListener(new ActionListener() {
+            @Override
 	    public void actionPerformed(ActionEvent e) {
 		new AboutDialog(mainWindow).setVisible(true);
 	    }
@@ -573,18 +588,23 @@ public class MainWindow extends JFrame implements WindowListener {
 	// }
     }
 
+    @Override
     public void windowActivated(WindowEvent e) {
     }
 
+    @Override
     public void windowDeactivated(WindowEvent e) {
     }
 
+    @Override
     public void windowDeiconified(WindowEvent e) {
     }
 
+    @Override
     public void windowIconified(WindowEvent e) {
     }
 
+    @Override
     public void windowOpened(WindowEvent e) {
     }
 

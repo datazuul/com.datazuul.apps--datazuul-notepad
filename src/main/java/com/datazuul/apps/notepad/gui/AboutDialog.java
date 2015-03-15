@@ -76,6 +76,7 @@ public class AboutDialog extends JDialog {
 	this.btnClose = new JButton("Close");
 	this.btnClose.setMnemonic(KeyEvent.VK_C);
 	this.btnClose.addActionListener(new ActionListener() {
+            @Override
 	    public void actionPerformed(ActionEvent e) {
 		dispose();
 	    }
