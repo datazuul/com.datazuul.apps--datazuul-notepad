@@ -43,44 +43,41 @@ import javax.swing.text.DefaultEditorKit;
 
 public class MainWindow extends JFrame implements WindowListener {
 
-    private static final long serialVersionUID = 1L;
     private static final String UNNAMED = "[untitled]";
+    private static final long serialVersionUID = 1L;
 
+    private File file = null;
     // Backend
     FileDao fileDao = new FileDaoImpl();
 
-    private File file = null;
-    private long originalLength;
-
     // GUI elements
     final private JFrame mainWindow = this;
-    private JMenuItem mnuItemNew = null;
-    private JMenuItem mnuItemOpen = null;
-    private JMenuItem mnuItemSave = null;
-    private JMenuItem mnuItemSaveAs = null;
-    private JMenuItem mnuItemPrint = null;
-
-    private JMenuItem mnuItemUndo = null;
-    private JMenuItem mnuItemCut = null;
+    private JMenuItem mnuItemColor = null;
     private JMenuItem mnuItemCopy = null;
-    private JMenuItem mnuItemPaste = null;
+    private JMenuItem mnuItemCut = null;
     private JMenuItem mnuItemDelete = null;
-    private JMenuItem mnuItemSelectAll = null;
-    private JMenuItem mnuItemInvertSelection = null;
-    private JMenuItem mnuItemFindReplace = null;
     private JMenuItem mnuItemFindNext = null;
     private JMenuItem mnuItemFindPrev = null;
+    private JMenuItem mnuItemFindReplace = null;
+    private JMenuItem mnuItemFont = null;
     private JMenuItem mnuItemGoTo = null;
+    private JMenuItem mnuItemInvertSelection = null;
+    private JMenuItem mnuItemNew = null;
+    private JMenuItem mnuItemOpen = null;
+    private JMenuItem mnuItemPaste = null;
+    private JMenuItem mnuItemPrint = null;
+    private JMenuItem mnuItemSave = null;
+    private JMenuItem mnuItemSaveAs = null;
+    private JMenuItem mnuItemSelectAll = null;
     private JMenuItem mnuItemTimeDate = null;
 
-    private JMenuItem mnuItemFont = null;
-    private JMenuItem mnuItemColor = null;
-
-    private JTextArea txtArea = null;
+    private JMenuItem mnuItemUndo = null;
+    private int originalTextHash;
 
     private JPanel statusBar = null;
     private JLabel statusLabelLeft = null;
     private JLabel statusLabelRight = null;
+    private JTextArea txtArea = null;
 
     public MainWindow() {
         super();
@@ -94,257 +91,6 @@ public class MainWindow extends JFrame implements WindowListener {
         char[] data = fileDao.read(file);
         String text = new String(data);
         updateGUI(file, text);
-    }
-
-    private void buildGUI() {
-        getContentPane().add(this.buildMainPanel());
-        setJMenuBar(this.buildMenuBar());
-
-        addWindowListener(this);
-        new WindowSizer(800, 500).centerOnScreen(this);
-    }
-
-    private JMenuBar buildMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-
-        menuBar.add(this.buildFileMenu());
-        menuBar.add(this.buildEditMenu());
-        menuBar.add(this.buildFormatMenu());
-        menuBar.add(this.buildViewMenu());
-        menuBar.add(this.buildHelpMenu());
-
-        return menuBar;
-    }
-
-    private JMenu buildFileMenu() {
-        JMenu mnuFile = new JMenu("File");
-        mnuFile.setMnemonic(KeyEvent.VK_F);
-
-        this.mnuItemNew = new JMenuItem("New", KeyEvent.VK_N);
-        this.mnuItemNew.setIcon(new ImageIcon(Datazuul.class.getResource("images/New16.gif")));
-        this.mnuItemNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
-        this.mnuItemNew.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (isModified()) {
-                    switch (dialogConfirmSaveFile()) {
-                        case JOptionPane.YES_OPTION:
-                            doSave();
-                            doNew();
-                            break;
-
-                        case JOptionPane.NO_OPTION:
-                            doNew();
-                            break;
-
-                        case JOptionPane.CANCEL_OPTION:
-                            // Don't do anything
-                            break;
-                    }
-                } else {
-                    doNew();
-                }
-            }
-        });
-
-        this.mnuItemOpen = new JMenuItem("Open...", KeyEvent.VK_O);
-        this.mnuItemOpen.setIcon(new ImageIcon(Datazuul.class.getResource("images/Open16.gif")));
-        this.mnuItemOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
-        this.mnuItemOpen.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                switch (dialogConfirmSaveFile()) {
-                    case JOptionPane.YES_OPTION:
-                        if (doSave()) {
-                            doOpen();
-                        }
-                        break;
-
-                    case JOptionPane.NO_OPTION:
-                        doOpen();
-                        break;
-
-                    case JOptionPane.CANCEL_OPTION:
-                        // Don't do anything
-                        break;
-                }
-            }
-        });
-
-        this.mnuItemSave = new JMenuItem("Save", KeyEvent.VK_S);
-        this.mnuItemSave.setIcon(new ImageIcon(Datazuul.class.getResource("images/Save16.gif")));
-        this.mnuItemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
-        this.mnuItemSave.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                doSave();
-            }
-        });
-        this.mnuItemSave.setEnabled(false);
-
-        this.mnuItemSaveAs = new JMenuItem("Save as...", KeyEvent.VK_A);
-        // this.mnuItemSaveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
-        // ActionEvent.CTRL_MASK));
-        this.mnuItemSaveAs.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                doSaveAs();
-            }
-        });
-
-        this.mnuItemPrint = new JMenuItem("Print...", KeyEvent.VK_P);
-        this.mnuItemPrint.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
-        this.mnuItemPrint.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                doPrint();
-            }
-        });
-
-        JMenuItem mnuItemQuit = new JMenuItem("Quit", KeyEvent.VK_Q);
-        mnuItemQuit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
-        mnuItemQuit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Only ask the user a question if the buffer was modified
-                if (getCurrentLength() != originalLength) {
-                    switch (dialogConfirmSaveFile()) {
-                        /*
-                         * The user wants to save the file, so let them do so. We
-                         * will exit the program only on a successful save
-                         */
-                        case JOptionPane.YES_OPTION:
-                            if (doSave()) {
-                                System.exit(1);
-                            }
-                            break;
-
-                        // The user does not want to save the file, so let's
-                        // just exit
-                        case JOptionPane.NO_OPTION:
-                            System.exit(1);
-                            break;
-
-                        case JOptionPane.CANCEL_OPTION:
-                            // Don't do anything
-                            break;
-                    }
-                } else {
-                    System.exit(1);
-                }
-            }
-        });
-
-        mnuFile.add(this.mnuItemNew);
-        mnuFile.add(this.mnuItemOpen);
-        mnuFile.add(this.mnuItemSave);
-        mnuFile.add(this.mnuItemSaveAs);
-        mnuFile.addSeparator();
-        mnuFile.add(this.mnuItemPrint);
-        mnuFile.addSeparator();
-        mnuFile.add(mnuItemQuit);
-
-        return mnuFile;
-    }
-
-    protected void doPrint() {
-        String fileName = UNNAMED;
-        if (file != null) {
-            fileName = file.getName();
-        }
-        final MessageFormat headerFormat = new MessageFormat(fileName);
-        final MessageFormat footerFormat = new MessageFormat("Page {0}");
-        final boolean showPrintDialog = true;
-        final PrintService service = null;
-        final PrintRequestAttributeSet attributes = null;
-        final boolean interactive = true;
-        try {
-            txtArea.print(headerFormat, footerFormat, showPrintDialog, service, attributes, interactive);
-        } catch (PrinterException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    protected void doNew() {
-        String text = "";
-        updateGUI(null, text);
-    }
-
-    private void updateGUI(File file, String text) {
-        statusLabelLeft.setText("");
-        txtArea.setText(text);
-        this.file = file;
-        originalLength = text.length();
-        String fileName = UNNAMED;
-        if (file != null) {
-            fileName = file.getName();
-        }
-        this.setTitle(fileName + " - " + Main.PROGRAM_NAME);
-    }
-
-    private boolean doSave() {
-        if (file == null) {
-            return doSaveAs();
-        }
-
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        String text = txtArea.getText();
-        fileDao.save(file, text);
-        updateGUI(file, text);
-        statusLabelLeft.setText("Saved: " + file.getName() + " " + text.length() + " chars");
-        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-
-        return true;
-    }
-
-    private boolean doSaveAs() {
-        JFileChooser fileDialog = new JFileChooser();
-        int response = fileDialog.showSaveDialog(this.mainWindow);
-
-        switch (response) {
-            case JFileChooser.APPROVE_OPTION:
-                file = fileDialog.getSelectedFile();
-
-                if (file.exists()) {
-                    int rc = dialogAskForOverwrite();
-                    switch (rc) {
-                        case 0:
-                            return doSave();
-                        default:
-                            return false;
-                    }
-                }
-                return doSave();
-
-            case JFileChooser.ERROR_OPTION:
-                String errorMessage = "Unable to save the file.";
-                JOptionPane.showMessageDialog(this.mainWindow, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
-                return false;
-
-            case JFileChooser.CANCEL_OPTION:
-            default:
-                System.out.println("Cancel save as.");
-                return false;
-        }
-    }
-
-    private void doOpen() {
-        JFileChooser fileDialog = new JFileChooser();
-        int response = fileDialog.showOpenDialog(this.mainWindow);
-        switch (response) {
-            case JFileChooser.APPROVE_OPTION:
-                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                file = fileDialog.getSelectedFile();
-                char[] data = fileDao.read(file);
-                String text = new String(data);
-                txtArea.setText(text);
-                statusLabelLeft.setText(file.getAbsolutePath());
-                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                break;
-            default:
-                break;
-        }
     }
 
     private JMenu buildEditMenu() {
@@ -449,6 +195,141 @@ public class MainWindow extends JFrame implements WindowListener {
         return mnuEdit;
     }
 
+    private JMenu buildFileMenu() {
+        JMenu mnuFile = new JMenu("File");
+        mnuFile.setMnemonic(KeyEvent.VK_F);
+
+        this.mnuItemNew = new JMenuItem("New", KeyEvent.VK_N);
+        this.mnuItemNew.setIcon(new ImageIcon(Datazuul.class.getResource("images/New16.gif")));
+        this.mnuItemNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
+        this.mnuItemNew.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (isModified()) {
+                    switch (dialogConfirmSaveFile()) {
+                        case JOptionPane.YES_OPTION:
+                            doSave();
+                            doNew();
+                            break;
+
+                        case JOptionPane.NO_OPTION:
+                            doNew();
+                            break;
+
+                        case JOptionPane.CANCEL_OPTION:
+                            // Don't do anything
+                            break;
+                    }
+                } else {
+                    doNew();
+                }
+            }
+        });
+
+        this.mnuItemOpen = new JMenuItem("Open...", KeyEvent.VK_O);
+        this.mnuItemOpen.setIcon(new ImageIcon(Datazuul.class.getResource("images/Open16.gif")));
+        this.mnuItemOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
+        this.mnuItemOpen.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (isModified()) {
+                    switch (dialogConfirmSaveFile()) {
+                        case JOptionPane.YES_OPTION:
+                            if (doSave()) {
+                                doOpen();
+                            }
+                            break;
+
+                        case JOptionPane.NO_OPTION:
+                            doOpen();
+                            break;
+
+                        case JOptionPane.CANCEL_OPTION:
+                            // Don't do anything
+                            break;
+                    }
+                } else {
+                    doOpen();
+                }
+            }
+        });
+
+        this.mnuItemSave = new JMenuItem("Save", KeyEvent.VK_S);
+        this.mnuItemSave.setIcon(new ImageIcon(Datazuul.class.getResource("images/Save16.gif")));
+        this.mnuItemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+        this.mnuItemSave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                doSave();
+            }
+        });
+        this.mnuItemSave.setEnabled(false);
+
+        this.mnuItemSaveAs = new JMenuItem("Save as...", KeyEvent.VK_A);
+        // this.mnuItemSaveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
+        // ActionEvent.CTRL_MASK));
+        this.mnuItemSaveAs.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                doSaveAs();
+            }
+        });
+
+        this.mnuItemPrint = new JMenuItem("Print...", KeyEvent.VK_P);
+        this.mnuItemPrint.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
+        this.mnuItemPrint.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                doPrint();
+            }
+        });
+
+        JMenuItem mnuItemQuit = new JMenuItem("Quit", KeyEvent.VK_Q);
+        mnuItemQuit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
+        mnuItemQuit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Only ask the user a question if the buffer was modified
+                if (isModified()) {
+                    switch (dialogConfirmSaveFile()) {
+                        /*
+                         * The user wants to save the file, so let them do so. We
+                         * will exit the program only on a successful save
+                         */
+                        case JOptionPane.YES_OPTION:
+                            if (doSave()) {
+                                System.exit(1);
+                            }
+                            break;
+
+                            // The user does not want to save the file, so let's
+                        // just exit
+                        case JOptionPane.NO_OPTION:
+                            System.exit(1);
+                            break;
+
+                        case JOptionPane.CANCEL_OPTION:
+                            // Don't do anything
+                            break;
+                    }
+                } else {
+                    System.exit(1);
+                }
+            }
+        });
+
+        mnuFile.add(this.mnuItemNew);
+        mnuFile.add(this.mnuItemOpen);
+        mnuFile.add(this.mnuItemSave);
+        mnuFile.add(this.mnuItemSaveAs);
+        mnuFile.addSeparator();
+        mnuFile.add(this.mnuItemPrint);
+        mnuFile.addSeparator();
+        mnuFile.add(mnuItemQuit);
+
+        return mnuFile;
+    }
+
     private JMenu buildFormatMenu() {
         JMenu mnuFormat = new JMenu("Format");
         mnuFormat.setMnemonic(KeyEvent.VK_M);
@@ -485,22 +366,12 @@ public class MainWindow extends JFrame implements WindowListener {
         return mnuFormat;
     }
 
-    private JMenu buildViewMenu() {
-        JMenu mnuView = new JMenu("View");
-        mnuView.setMnemonic(KeyEvent.VK_V);
+    private void buildGUI() {
+        getContentPane().add(this.buildMainPanel());
+        setJMenuBar(this.buildMenuBar());
 
-        JCheckBoxMenuItem mnuItemStatusBar = new JCheckBoxMenuItem("Status bar", true);
-        mnuItemStatusBar.setMnemonic(KeyEvent.VK_S);
-        mnuItemStatusBar.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                statusBar.setVisible(!statusBar.isVisible());
-            }
-        });
-
-        mnuView.add(mnuItemStatusBar);
-
-        return mnuView;
+        addWindowListener(this);
+        new WindowSizer(800, 500).centerOnScreen(this);
     }
 
     private JMenu buildHelpMenu() {
@@ -532,16 +403,16 @@ public class MainWindow extends JFrame implements WindowListener {
         return panel;
     }
 
-    private JScrollPane buildTextArea() {
-        this.txtArea = new JTextArea();
-        this.txtArea.setDragEnabled(true);
-        this.txtArea.setMargin(new Insets(4, 4, 4, 4));
+    private JMenuBar buildMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
 
-        JScrollPane scrollPane = new JScrollPane(this.txtArea);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        // scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        menuBar.add(this.buildFileMenu());
+        menuBar.add(this.buildEditMenu());
+        menuBar.add(this.buildFormatMenu());
+        menuBar.add(this.buildViewMenu());
+        menuBar.add(this.buildHelpMenu());
 
-        return scrollPane;
+        return menuBar;
     }
 
     private JPanel buildStatusBar() {
@@ -561,6 +432,43 @@ public class MainWindow extends JFrame implements WindowListener {
         return this.statusBar;
     }
 
+    private JScrollPane buildTextArea() {
+        this.txtArea = new JTextArea();
+        this.txtArea.setDragEnabled(true);
+        this.txtArea.setMargin(new Insets(4, 4, 4, 4));
+
+        JScrollPane scrollPane = new JScrollPane(this.txtArea);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        // scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        return scrollPane;
+    }
+
+    private JMenu buildViewMenu() {
+        JMenu mnuView = new JMenu("View");
+        mnuView.setMnemonic(KeyEvent.VK_V);
+
+        JCheckBoxMenuItem mnuItemStatusBar = new JCheckBoxMenuItem("Status bar", true);
+        mnuItemStatusBar.setMnemonic(KeyEvent.VK_S);
+        mnuItemStatusBar.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                statusBar.setVisible(!statusBar.isVisible());
+            }
+        });
+
+        mnuView.add(mnuItemStatusBar);
+
+        return mnuView;
+    }
+
+    public int dialogAskForOverwrite() {
+        Object[] options = {"Yes", "No"};
+        int wasnun = JOptionPane.showOptionDialog(null, "The file already exists.\nDo you want to overwrite it?",
+                "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+        return wasnun;
+    }
+
     private int dialogConfirmSaveFile() {
         String filename = (this.file == null) ? "Untitled" : this.file.getName();
         String question = "The text in the " + filename + " file has changed.\nDo you want to save the changes?";
@@ -570,16 +478,118 @@ public class MainWindow extends JFrame implements WindowListener {
         return response;
     }
 
+    protected void doNew() {
+        String text = "";
+        updateGUI(null, text);
+    }
+
+    private void doOpen() {
+        JFileChooser fileDialog = new JFileChooser();
+        int response = fileDialog.showOpenDialog(this.mainWindow);
+        switch (response) {
+            case JFileChooser.APPROVE_OPTION:
+                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                file = fileDialog.getSelectedFile();
+                char[] data = fileDao.read(file);
+                String text = new String(data);
+
+                updateGUI(file, text);
+//
+//                txtArea.setText(text);
+//                updateOriginalTextHash(text);
+//                statusLabelLeft.setText(file.getAbsolutePath());
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                break;
+            default:
+                break;
+        }
+    }
+
+    protected void doPrint() {
+        String fileName = UNNAMED;
+        if (file != null) {
+            fileName = file.getName();
+        }
+        final MessageFormat headerFormat = new MessageFormat(fileName);
+        final MessageFormat footerFormat = new MessageFormat("Page {0}");
+        final boolean showPrintDialog = true;
+        final PrintService service = null;
+        final PrintRequestAttributeSet attributes = null;
+        final boolean interactive = true;
+        try {
+            txtArea.print(headerFormat, footerFormat, showPrintDialog, service, attributes, interactive);
+        } catch (PrinterException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    private boolean doSave() {
+        if (file == null) {
+            return doSaveAs();
+        }
+
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        String text = txtArea.getText();
+        fileDao.save(file, text);
+        updateGUI(file, text);
+        statusLabelLeft.setText("Saved: " + file.getName() + " " + text.length() + " chars");
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
+        return true;
+    }
+
+    private boolean doSaveAs() {
+        JFileChooser fileDialog = new JFileChooser();
+        int response = fileDialog.showSaveDialog(this.mainWindow);
+
+        switch (response) {
+            case JFileChooser.APPROVE_OPTION:
+                file = fileDialog.getSelectedFile();
+
+                if (file.exists()) {
+                    int rc = dialogAskForOverwrite();
+                    switch (rc) {
+                        case 0:
+                            return doSave();
+                        default:
+                            return false;
+                    }
+                }
+                return doSave();
+
+            case JFileChooser.ERROR_OPTION:
+                String errorMessage = "Unable to save the file.";
+                JOptionPane.showMessageDialog(this.mainWindow, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+
+            case JFileChooser.CANCEL_OPTION:
+            default:
+                System.out.println("Cancel save as.");
+                return false;
+        }
+    }
+
     private boolean isModified() {
-        return getCurrentLength() != originalLength;
+        int currentTextHash = txtArea.getText().hashCode();
+        return currentTextHash != originalTextHash;
     }
 
-    public void windowClosed(WindowEvent e) {
-        this.updateWindowList();
+    private void updateGUI(File file, String text) {
+        statusLabelLeft.setText("");
+        txtArea.setText(text);
+        this.file = file;
+        updateOriginalTextHash(text);
+        String fileName = UNNAMED;
+        if (file != null) {
+            fileName = file.getName();
+            statusLabelLeft.setText(file.getAbsolutePath());
+        }
+        this.setTitle(fileName + " - " + Main.PROGRAM_NAME);
     }
 
-    public void windowClosing(WindowEvent e) {
-        this.updateWindowList();
+    private void updateOriginalTextHash(String text) {
+        originalTextHash = text.hashCode();
     }
 
     private void updateWindowList() {
@@ -591,6 +601,16 @@ public class MainWindow extends JFrame implements WindowListener {
 
     @Override
     public void windowActivated(WindowEvent e) {
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+        this.updateWindowList();
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        this.updateWindowList();
     }
 
     @Override
@@ -607,16 +627,5 @@ public class MainWindow extends JFrame implements WindowListener {
 
     @Override
     public void windowOpened(WindowEvent e) {
-    }
-
-    private int getCurrentLength() {
-        return txtArea.getText().length();
-    }
-
-    public int dialogAskForOverwrite() {
-        Object[] options = {"Yes", "No"};
-        int wasnun = JOptionPane.showOptionDialog(null, "The file already exists.\nDo you want to overwrite it?",
-                "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-        return wasnun;
     }
 }
