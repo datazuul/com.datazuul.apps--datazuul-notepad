@@ -6,7 +6,8 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <name>datazuul.com - DataZuul Applications: Notepad</name>
-
+  <description>Online editor for managing and editing the files of one or more website(s). Provides template-directory, editing, (recursive) deleting, creating, uploading of files. no WYSIWYG CMS but live preview on webserver (Java, Tapestry 3.0, no database)</description>
+  
   <build>
     <finalName>${project.artifactId}</finalName>
     <plugins>
