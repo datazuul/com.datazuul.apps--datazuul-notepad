@@ -42,6 +42,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.DefaultEditorKit;
 
 public class MainWindow extends JFrame implements WindowListener {
+
     private static final long serialVersionUID = 1L;
     private static final String UNNAMED = "[untitled]";
 
@@ -82,510 +83,510 @@ public class MainWindow extends JFrame implements WindowListener {
     private JLabel statusLabelRight = null;
 
     public MainWindow() {
-	super();
-	this.buildGUI();
-	updateGUI(null, "");
+        super();
+        this.buildGUI();
+        updateGUI(null, "");
     }
 
     public MainWindow(File file) {
-	super();
-	this.buildGUI();
-	char[] data = fileDao.read(file);
-	String text = new String(data);
-	updateGUI(file, text);
+        super();
+        this.buildGUI();
+        char[] data = fileDao.read(file);
+        String text = new String(data);
+        updateGUI(file, text);
     }
 
     private void buildGUI() {
-	getContentPane().add(this.buildMainPanel());
-	setJMenuBar(this.buildMenuBar());
+        getContentPane().add(this.buildMainPanel());
+        setJMenuBar(this.buildMenuBar());
 
-	addWindowListener(this);
-	new WindowSizer(800, 500).centerOnScreen(this);
+        addWindowListener(this);
+        new WindowSizer(800, 500).centerOnScreen(this);
     }
 
     private JMenuBar buildMenuBar() {
-	JMenuBar menuBar = new JMenuBar();
+        JMenuBar menuBar = new JMenuBar();
 
-	menuBar.add(this.buildFileMenu());
-	menuBar.add(this.buildEditMenu());
-	menuBar.add(this.buildFormatMenu());
-	menuBar.add(this.buildViewMenu());
-	menuBar.add(this.buildHelpMenu());
+        menuBar.add(this.buildFileMenu());
+        menuBar.add(this.buildEditMenu());
+        menuBar.add(this.buildFormatMenu());
+        menuBar.add(this.buildViewMenu());
+        menuBar.add(this.buildHelpMenu());
 
-	return menuBar;
+        return menuBar;
     }
 
     private JMenu buildFileMenu() {
-	JMenu mnuFile = new JMenu("File");
-	mnuFile.setMnemonic(KeyEvent.VK_F);
+        JMenu mnuFile = new JMenu("File");
+        mnuFile.setMnemonic(KeyEvent.VK_F);
 
-	this.mnuItemNew = new JMenuItem("New", KeyEvent.VK_N);
-	this.mnuItemNew.setIcon(new ImageIcon(Datazuul.class.getResource("images/New16.gif")));
-	this.mnuItemNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
-	this.mnuItemNew.addActionListener(new ActionListener() {
+        this.mnuItemNew = new JMenuItem("New", KeyEvent.VK_N);
+        this.mnuItemNew.setIcon(new ImageIcon(Datazuul.class.getResource("images/New16.gif")));
+        this.mnuItemNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
+        this.mnuItemNew.addActionListener(new ActionListener() {
             @Override
-	    public void actionPerformed(ActionEvent e) {
-		if (isModified()) {
-		    switch (dialogConfirmSaveFile()) {
-		    case JOptionPane.YES_OPTION:
-			doSave();
-			doNew();
-			break;
+            public void actionPerformed(ActionEvent e) {
+                if (isModified()) {
+                    switch (dialogConfirmSaveFile()) {
+                        case JOptionPane.YES_OPTION:
+                            doSave();
+                            doNew();
+                            break;
 
-		    case JOptionPane.NO_OPTION:
-			doNew();
-			break;
+                        case JOptionPane.NO_OPTION:
+                            doNew();
+                            break;
 
-		    case JOptionPane.CANCEL_OPTION:
-			// Don't do anything
-			break;
-		    }
-		} else {
-		    doNew();
-		}
-	    }
-	});
+                        case JOptionPane.CANCEL_OPTION:
+                            // Don't do anything
+                            break;
+                    }
+                } else {
+                    doNew();
+                }
+            }
+        });
 
-	this.mnuItemOpen = new JMenuItem("Open...", KeyEvent.VK_O);
-	this.mnuItemOpen.setIcon(new ImageIcon(Datazuul.class.getResource("images/Open16.gif")));
-	this.mnuItemOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
-	this.mnuItemOpen.addActionListener(new ActionListener() {
+        this.mnuItemOpen = new JMenuItem("Open...", KeyEvent.VK_O);
+        this.mnuItemOpen.setIcon(new ImageIcon(Datazuul.class.getResource("images/Open16.gif")));
+        this.mnuItemOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
+        this.mnuItemOpen.addActionListener(new ActionListener() {
             @Override
-	    public void actionPerformed(ActionEvent e) {
-		switch (dialogConfirmSaveFile()) {
-		case JOptionPane.YES_OPTION:
-		    if (doSave()) {
-			doOpen();
-		    }
-		    break;
+            public void actionPerformed(ActionEvent e) {
+                switch (dialogConfirmSaveFile()) {
+                    case JOptionPane.YES_OPTION:
+                        if (doSave()) {
+                            doOpen();
+                        }
+                        break;
 
-		case JOptionPane.NO_OPTION:
-		    doOpen();
-		    break;
+                    case JOptionPane.NO_OPTION:
+                        doOpen();
+                        break;
 
-		case JOptionPane.CANCEL_OPTION:
-		    // Don't do anything
-		    break;
-		}
-	    }
-	});
+                    case JOptionPane.CANCEL_OPTION:
+                        // Don't do anything
+                        break;
+                }
+            }
+        });
 
-	this.mnuItemSave = new JMenuItem("Save", KeyEvent.VK_S);
-	this.mnuItemSave.setIcon(new ImageIcon(Datazuul.class.getResource("images/Save16.gif")));
-	this.mnuItemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
-	this.mnuItemSave.addActionListener(new ActionListener() {
+        this.mnuItemSave = new JMenuItem("Save", KeyEvent.VK_S);
+        this.mnuItemSave.setIcon(new ImageIcon(Datazuul.class.getResource("images/Save16.gif")));
+        this.mnuItemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+        this.mnuItemSave.addActionListener(new ActionListener() {
             @Override
-	    public void actionPerformed(ActionEvent e) {
-		doSave();
-	    }
-	});
-	this.mnuItemSave.setEnabled(false);
+            public void actionPerformed(ActionEvent e) {
+                doSave();
+            }
+        });
+        this.mnuItemSave.setEnabled(false);
 
-	this.mnuItemSaveAs = new JMenuItem("Save as...", KeyEvent.VK_A);
-	// this.mnuItemSaveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
-	// ActionEvent.CTRL_MASK));
-	this.mnuItemSaveAs.addActionListener(new ActionListener() {
+        this.mnuItemSaveAs = new JMenuItem("Save as...", KeyEvent.VK_A);
+        // this.mnuItemSaveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
+        // ActionEvent.CTRL_MASK));
+        this.mnuItemSaveAs.addActionListener(new ActionListener() {
             @Override
-	    public void actionPerformed(ActionEvent e) {
-		doSaveAs();
-	    }
-	});
+            public void actionPerformed(ActionEvent e) {
+                doSaveAs();
+            }
+        });
 
-	this.mnuItemPrint = new JMenuItem("Print...", KeyEvent.VK_P);
-	this.mnuItemPrint.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
-	this.mnuItemPrint.addActionListener(new ActionListener() {
+        this.mnuItemPrint = new JMenuItem("Print...", KeyEvent.VK_P);
+        this.mnuItemPrint.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
+        this.mnuItemPrint.addActionListener(new ActionListener() {
             @Override
-	    public void actionPerformed(ActionEvent e) {
-		doPrint();
-	    }
-	});
+            public void actionPerformed(ActionEvent e) {
+                doPrint();
+            }
+        });
 
-	JMenuItem mnuItemQuit = new JMenuItem("Quit", KeyEvent.VK_Q);
-	mnuItemQuit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
-	mnuItemQuit.addActionListener(new ActionListener() {
+        JMenuItem mnuItemQuit = new JMenuItem("Quit", KeyEvent.VK_Q);
+        mnuItemQuit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
+        mnuItemQuit.addActionListener(new ActionListener() {
             @Override
-	    public void actionPerformed(ActionEvent e) {
-		// Only ask the user a question if the buffer was modified
-		if (getCurrentLength() != originalLength) {
-		    switch (dialogConfirmSaveFile()) {
-		    /*
-		     * The user wants to save the file, so let them do so. We
-		     * will exit the program only on a successful save
-		     */
-		    case JOptionPane.YES_OPTION:
-			if (doSave()) {
-			    System.exit(1);
-			}
-			break;
+            public void actionPerformed(ActionEvent e) {
+                // Only ask the user a question if the buffer was modified
+                if (getCurrentLength() != originalLength) {
+                    switch (dialogConfirmSaveFile()) {
+                        /*
+                         * The user wants to save the file, so let them do so. We
+                         * will exit the program only on a successful save
+                         */
+                        case JOptionPane.YES_OPTION:
+                            if (doSave()) {
+                                System.exit(1);
+                            }
+                            break;
 
-		    // The user does not want to save the file, so let's
-		    // just exit
-		    case JOptionPane.NO_OPTION:
-			System.exit(1);
-			break;
+                        // The user does not want to save the file, so let's
+                        // just exit
+                        case JOptionPane.NO_OPTION:
+                            System.exit(1);
+                            break;
 
-		    case JOptionPane.CANCEL_OPTION:
-			// Don't do anything
-			break;
-		    }
-		} else {
-		    System.exit(1);
-		}
-	    }
-	});
+                        case JOptionPane.CANCEL_OPTION:
+                            // Don't do anything
+                            break;
+                    }
+                } else {
+                    System.exit(1);
+                }
+            }
+        });
 
-	mnuFile.add(this.mnuItemNew);
-	mnuFile.add(this.mnuItemOpen);
-	mnuFile.add(this.mnuItemSave);
-	mnuFile.add(this.mnuItemSaveAs);
-	mnuFile.addSeparator();
-	mnuFile.add(this.mnuItemPrint);
-	mnuFile.addSeparator();
-	mnuFile.add(mnuItemQuit);
+        mnuFile.add(this.mnuItemNew);
+        mnuFile.add(this.mnuItemOpen);
+        mnuFile.add(this.mnuItemSave);
+        mnuFile.add(this.mnuItemSaveAs);
+        mnuFile.addSeparator();
+        mnuFile.add(this.mnuItemPrint);
+        mnuFile.addSeparator();
+        mnuFile.add(mnuItemQuit);
 
-	return mnuFile;
+        return mnuFile;
     }
 
     protected void doPrint() {
-	String fileName = UNNAMED;
-	if (file != null) {
-	    fileName = file.getName();
-	}
-	final MessageFormat headerFormat = new MessageFormat(fileName);
-	final MessageFormat footerFormat = new MessageFormat("Page {0}");
-	final boolean showPrintDialog = true;
-	final PrintService service = null;
-	final PrintRequestAttributeSet attributes = null;
-	final boolean interactive = true;
-	try {
-	    txtArea.print(headerFormat, footerFormat, showPrintDialog, service, attributes, interactive);
-	} catch (PrinterException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
+        String fileName = UNNAMED;
+        if (file != null) {
+            fileName = file.getName();
+        }
+        final MessageFormat headerFormat = new MessageFormat(fileName);
+        final MessageFormat footerFormat = new MessageFormat("Page {0}");
+        final boolean showPrintDialog = true;
+        final PrintService service = null;
+        final PrintRequestAttributeSet attributes = null;
+        final boolean interactive = true;
+        try {
+            txtArea.print(headerFormat, footerFormat, showPrintDialog, service, attributes, interactive);
+        } catch (PrinterException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     protected void doNew() {
-	String text = "";
-	updateGUI(null, text);
+        String text = "";
+        updateGUI(null, text);
     }
 
     private void updateGUI(File file, String text) {
-	statusLabelLeft.setText("");
-	txtArea.setText(text);
-	this.file = file;
-	originalLength = text.length();
-	String fileName = UNNAMED;
-	if (file != null) {
-	    fileName = file.getName();
-	}
-	this.setTitle(fileName + " - " + Main.PROGRAM_NAME);
+        statusLabelLeft.setText("");
+        txtArea.setText(text);
+        this.file = file;
+        originalLength = text.length();
+        String fileName = UNNAMED;
+        if (file != null) {
+            fileName = file.getName();
+        }
+        this.setTitle(fileName + " - " + Main.PROGRAM_NAME);
     }
 
     private boolean doSave() {
-	if (file == null) {
-	    return doSaveAs();
-	}
+        if (file == null) {
+            return doSaveAs();
+        }
 
-	setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-	String text = txtArea.getText();
-	fileDao.save(file, text);
-	updateGUI(file, text);
-	statusLabelLeft.setText("Saved: " + file.getName() + " " + text.length() + " chars");
-	setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        String text = txtArea.getText();
+        fileDao.save(file, text);
+        updateGUI(file, text);
+        statusLabelLeft.setText("Saved: " + file.getName() + " " + text.length() + " chars");
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
-	return true;
+        return true;
     }
 
     private boolean doSaveAs() {
-	JFileChooser fileDialog = new JFileChooser();
-	int response = fileDialog.showSaveDialog(this.mainWindow);
+        JFileChooser fileDialog = new JFileChooser();
+        int response = fileDialog.showSaveDialog(this.mainWindow);
 
-	switch (response) {
-	case JFileChooser.APPROVE_OPTION:
-	    file = fileDialog.getSelectedFile();
+        switch (response) {
+            case JFileChooser.APPROVE_OPTION:
+                file = fileDialog.getSelectedFile();
 
-	    if (file.exists()) {
-		int rc = dialogAskForOverwrite();
-		switch (rc) {
-		case 0:
-		    return doSave();
-		default:
-		    return false;
-		}
-	    }
-	    return doSave();
+                if (file.exists()) {
+                    int rc = dialogAskForOverwrite();
+                    switch (rc) {
+                        case 0:
+                            return doSave();
+                        default:
+                            return false;
+                    }
+                }
+                return doSave();
 
-	case JFileChooser.ERROR_OPTION:
-	    String errorMessage = "Unable to save the file.";
-	    JOptionPane.showMessageDialog(this.mainWindow, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
-	    return false;
+            case JFileChooser.ERROR_OPTION:
+                String errorMessage = "Unable to save the file.";
+                JOptionPane.showMessageDialog(this.mainWindow, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
 
-	case JFileChooser.CANCEL_OPTION:
-	default:
-	    System.out.println("Cancel save as.");
-	    return false;
-	}
+            case JFileChooser.CANCEL_OPTION:
+            default:
+                System.out.println("Cancel save as.");
+                return false;
+        }
     }
 
     private void doOpen() {
-	JFileChooser fileDialog = new JFileChooser();
-	int response = fileDialog.showOpenDialog(this.mainWindow);
-	switch (response) {
-	case JFileChooser.APPROVE_OPTION:
-	    setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-	    file = fileDialog.getSelectedFile();
-	    char[] data = fileDao.read(file);
-	    String text = new String(data);
-	    txtArea.setText(text);
-	    statusLabelLeft.setText(file.getAbsolutePath());
-	    setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-	    break;
-	default:
-	    break;
-	}
+        JFileChooser fileDialog = new JFileChooser();
+        int response = fileDialog.showOpenDialog(this.mainWindow);
+        switch (response) {
+            case JFileChooser.APPROVE_OPTION:
+                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                file = fileDialog.getSelectedFile();
+                char[] data = fileDao.read(file);
+                String text = new String(data);
+                txtArea.setText(text);
+                statusLabelLeft.setText(file.getAbsolutePath());
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                break;
+            default:
+                break;
+        }
     }
 
     private JMenu buildEditMenu() {
-	JMenu mnuEdit = new JMenu("Edit");
-	mnuEdit.setMnemonic(KeyEvent.VK_E);
+        JMenu mnuEdit = new JMenu("Edit");
+        mnuEdit.setMnemonic(KeyEvent.VK_E);
 
-	this.mnuItemUndo = new JMenuItem("Undo");
+        this.mnuItemUndo = new JMenuItem("Undo");
 
-	this.mnuItemCut = new JMenuItem(this.txtArea.getActionMap().get(DefaultEditorKit.cutAction));
-	this.mnuItemCut.setText("Cut");
-	this.mnuItemCut.setMnemonic(KeyEvent.VK_X);
-	this.mnuItemCut.setIcon(new ImageIcon(Datazuul.class.getResource("images/Cut16.gif")));
-	this.mnuItemCut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
+        this.mnuItemCut = new JMenuItem(this.txtArea.getActionMap().get(DefaultEditorKit.cutAction));
+        this.mnuItemCut.setText("Cut");
+        this.mnuItemCut.setMnemonic(KeyEvent.VK_X);
+        this.mnuItemCut.setIcon(new ImageIcon(Datazuul.class.getResource("images/Cut16.gif")));
+        this.mnuItemCut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
 //	this.mnuItemCut.setEnabled(false);
 
-	this.mnuItemCopy = new JMenuItem(this.txtArea.getActionMap().get(DefaultEditorKit.copyAction));
-	this.mnuItemCopy.setText("Copy");
-	this.mnuItemCopy.setMnemonic(KeyEvent.VK_C);
-	this.mnuItemCopy.setIcon(new ImageIcon(Datazuul.class.getResource("images/Copy16.gif")));
-	this.mnuItemCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
+        this.mnuItemCopy = new JMenuItem(this.txtArea.getActionMap().get(DefaultEditorKit.copyAction));
+        this.mnuItemCopy.setText("Copy");
+        this.mnuItemCopy.setMnemonic(KeyEvent.VK_C);
+        this.mnuItemCopy.setIcon(new ImageIcon(Datazuul.class.getResource("images/Copy16.gif")));
+        this.mnuItemCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
 //	this.mnuItemCopy.setEnabled(false);
 
-	this.mnuItemPaste = new JMenuItem(this.txtArea.getActionMap().get(DefaultEditorKit.pasteAction));
-	this.mnuItemPaste.setText("Paste");
-	this.mnuItemPaste.setMnemonic(KeyEvent.VK_V);
-	this.mnuItemPaste.setIcon(new ImageIcon(Datazuul.class.getResource("images/Paste16.gif")));
-	this.mnuItemPaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
+        this.mnuItemPaste = new JMenuItem(this.txtArea.getActionMap().get(DefaultEditorKit.pasteAction));
+        this.mnuItemPaste.setText("Paste");
+        this.mnuItemPaste.setMnemonic(KeyEvent.VK_V);
+        this.mnuItemPaste.setIcon(new ImageIcon(Datazuul.class.getResource("images/Paste16.gif")));
+        this.mnuItemPaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
 //	this.mnuItemPaste.setEnabled(false);
 
-	this.mnuItemDelete = new JMenuItem("Delete");
+        this.mnuItemDelete = new JMenuItem("Delete");
 
-	this.mnuItemFindReplace = new JMenuItem("Find/Replace...");
-	this.mnuItemFindReplace.addActionListener(new ActionListener() {
+        this.mnuItemFindReplace = new JMenuItem("Find/Replace...");
+        this.mnuItemFindReplace.addActionListener(new ActionListener() {
             @Override
-	    public void actionPerformed(ActionEvent e) {
-		new FindReplaceDialog(mainWindow, null).setVisible(true);
-	    }
-	});
+            public void actionPerformed(ActionEvent e) {
+                new FindReplaceDialog(mainWindow, null).setVisible(true);
+            }
+        });
 
-	this.mnuItemFindNext = new JMenuItem("Find Next");
-	this.mnuItemFindPrev = new JMenuItem("Find Previous");
+        this.mnuItemFindNext = new JMenuItem("Find Next");
+        this.mnuItemFindPrev = new JMenuItem("Find Previous");
 
-	this.mnuItemGoTo = new JMenuItem("Go To...");
-	this.mnuItemGoTo.addActionListener(new ActionListener() {
+        this.mnuItemGoTo = new JMenuItem("Go To...");
+        this.mnuItemGoTo.addActionListener(new ActionListener() {
             @Override
-	    public void actionPerformed(ActionEvent e) {
-		String inputValue = JOptionPane.showInputDialog(mainWindow, "Line number:", "Go To Line",
-			JOptionPane.QUESTION_MESSAGE);
-	    }
-	});
+            public void actionPerformed(ActionEvent e) {
+                String inputValue = JOptionPane.showInputDialog(mainWindow, "Line number:", "Go To Line",
+                        JOptionPane.QUESTION_MESSAGE);
+            }
+        });
 
-	this.mnuItemSelectAll = new JMenuItem("Select All", KeyEvent.VK_A);
-	this.mnuItemSelectAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
-	// this.mnuItemSelectAll.setEnabled(false);
-	this.mnuItemSelectAll.addActionListener(new ActionListener() {
+        this.mnuItemSelectAll = new JMenuItem("Select All", KeyEvent.VK_A);
+        this.mnuItemSelectAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
+        // this.mnuItemSelectAll.setEnabled(false);
+        this.mnuItemSelectAll.addActionListener(new ActionListener() {
             @Override
-	    public void actionPerformed(ActionEvent e) {
-		txtArea.selectAll();
-	    }
-	});
+            public void actionPerformed(ActionEvent e) {
+                txtArea.selectAll();
+            }
+        });
 
-	this.mnuItemInvertSelection = new JMenuItem("Invert Selection", KeyEvent.VK_I);
-	// this.mnuItemInvertSelection.setEnabled(false);
+        this.mnuItemInvertSelection = new JMenuItem("Invert Selection", KeyEvent.VK_I);
+        // this.mnuItemInvertSelection.setEnabled(false);
 
-	this.mnuItemTimeDate = new JMenuItem("Time/Date");
-	this.mnuItemTimeDate.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
-	this.mnuItemTimeDate.addActionListener(new ActionListener() {
+        this.mnuItemTimeDate = new JMenuItem("Time/Date");
+        this.mnuItemTimeDate.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+        this.mnuItemTimeDate.addActionListener(new ActionListener() {
             @Override
-	    public void actionPerformed(ActionEvent e) {
-		Calendar now = Calendar.getInstance();
-		int hour = now.get(Calendar.HOUR);
-		int minute = now.get(Calendar.MINUTE);
-		String padded_minute = (minute < 10) ? ("0" + minute) : String.valueOf(minute);
-		String am_pm = (now.get(Calendar.AM_PM) == Calendar.AM) ? "AM" : "PM";
+            public void actionPerformed(ActionEvent e) {
+                Calendar now = Calendar.getInstance();
+                int hour = now.get(Calendar.HOUR);
+                int minute = now.get(Calendar.MINUTE);
+                String padded_minute = (minute < 10) ? ("0" + minute) : String.valueOf(minute);
+                String am_pm = (now.get(Calendar.AM_PM) == Calendar.AM) ? "AM" : "PM";
 
-		int month = now.get(Calendar.MONTH) + 1;
-		int day = now.get(Calendar.DAY_OF_MONTH);
-		int year = now.get(Calendar.YEAR);
+                int month = now.get(Calendar.MONTH) + 1;
+                int day = now.get(Calendar.DAY_OF_MONTH);
+                int year = now.get(Calendar.YEAR);
 
-		String date = hour + ":" + padded_minute + " " + am_pm + " " + month + "/" + day + "/" + year;
-		txtArea.insert(date, txtArea.getCaretPosition());
-	    }
-	});
+                String date = hour + ":" + padded_minute + " " + am_pm + " " + month + "/" + day + "/" + year;
+                txtArea.insert(date, txtArea.getCaretPosition());
+            }
+        });
 
-	mnuEdit.add(this.mnuItemUndo);
-	mnuEdit.addSeparator();
-	mnuEdit.add(this.mnuItemCut);
-	mnuEdit.add(this.mnuItemCopy);
-	mnuEdit.add(this.mnuItemPaste);
-	mnuEdit.add(this.mnuItemDelete);
-	mnuEdit.addSeparator();
-	mnuEdit.add(this.mnuItemFindReplace);
-	mnuEdit.add(this.mnuItemFindNext);
-	mnuEdit.add(this.mnuItemFindPrev);
-	mnuEdit.add(this.mnuItemGoTo);
-	mnuEdit.addSeparator();
-	mnuEdit.add(this.mnuItemSelectAll);
-	mnuEdit.add(this.mnuItemInvertSelection);
-	mnuEdit.addSeparator();
-	mnuEdit.add(this.mnuItemTimeDate);
+        mnuEdit.add(this.mnuItemUndo);
+        mnuEdit.addSeparator();
+        mnuEdit.add(this.mnuItemCut);
+        mnuEdit.add(this.mnuItemCopy);
+        mnuEdit.add(this.mnuItemPaste);
+        mnuEdit.add(this.mnuItemDelete);
+        mnuEdit.addSeparator();
+        mnuEdit.add(this.mnuItemFindReplace);
+        mnuEdit.add(this.mnuItemFindNext);
+        mnuEdit.add(this.mnuItemFindPrev);
+        mnuEdit.add(this.mnuItemGoTo);
+        mnuEdit.addSeparator();
+        mnuEdit.add(this.mnuItemSelectAll);
+        mnuEdit.add(this.mnuItemInvertSelection);
+        mnuEdit.addSeparator();
+        mnuEdit.add(this.mnuItemTimeDate);
 
-	return mnuEdit;
+        return mnuEdit;
     }
 
     private JMenu buildFormatMenu() {
-	JMenu mnuFormat = new JMenu("Format");
-	mnuFormat.setMnemonic(KeyEvent.VK_M);
+        JMenu mnuFormat = new JMenu("Format");
+        mnuFormat.setMnemonic(KeyEvent.VK_M);
 
-	JCheckBoxMenuItem mnuItemWordWrap = new JCheckBoxMenuItem("Word Wrap");
-	mnuItemWordWrap.setMnemonic(KeyEvent.VK_W);
-	mnuItemWordWrap.addItemListener(new ItemListener() {
+        JCheckBoxMenuItem mnuItemWordWrap = new JCheckBoxMenuItem("Word Wrap");
+        mnuItemWordWrap.setMnemonic(KeyEvent.VK_W);
+        mnuItemWordWrap.addItemListener(new ItemListener() {
             @Override
-	    public void itemStateChanged(ItemEvent e) {
-		txtArea.setWrapStyleWord(!txtArea.getWrapStyleWord());
-	    }
-	});
+            public void itemStateChanged(ItemEvent e) {
+                txtArea.setWrapStyleWord(!txtArea.getWrapStyleWord());
+            }
+        });
 
-	this.mnuItemFont = new JMenuItem("Font...");
-	this.mnuItemFont.addActionListener(new ActionListener() {
+        this.mnuItemFont = new JMenuItem("Font...");
+        this.mnuItemFont.addActionListener(new ActionListener() {
             @Override
-	    public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
 
-	    }
-	});
+            }
+        });
 
-	this.mnuItemColor = new JMenuItem("Color...");
-	this.mnuItemColor.addActionListener(new ActionListener() {
+        this.mnuItemColor = new JMenuItem("Color...");
+        this.mnuItemColor.addActionListener(new ActionListener() {
             @Override
-	    public void actionPerformed(ActionEvent e) {
-		Color fontColor = JColorChooser.showDialog(mainWindow, "Choose a font color", null);
-	    }
-	});
+            public void actionPerformed(ActionEvent e) {
+                Color fontColor = JColorChooser.showDialog(mainWindow, "Choose a font color", null);
+            }
+        });
 
-	mnuFormat.add(mnuItemWordWrap);
-	mnuFormat.add(this.mnuItemFont);
-	mnuFormat.add(this.mnuItemColor);
+        mnuFormat.add(mnuItemWordWrap);
+        mnuFormat.add(this.mnuItemFont);
+        mnuFormat.add(this.mnuItemColor);
 
-	return mnuFormat;
+        return mnuFormat;
     }
 
     private JMenu buildViewMenu() {
-	JMenu mnuView = new JMenu("View");
-	mnuView.setMnemonic(KeyEvent.VK_V);
+        JMenu mnuView = new JMenu("View");
+        mnuView.setMnemonic(KeyEvent.VK_V);
 
-	JCheckBoxMenuItem mnuItemStatusBar = new JCheckBoxMenuItem("Status bar", true);
-	mnuItemStatusBar.setMnemonic(KeyEvent.VK_S);
-	mnuItemStatusBar.addItemListener(new ItemListener() {
+        JCheckBoxMenuItem mnuItemStatusBar = new JCheckBoxMenuItem("Status bar", true);
+        mnuItemStatusBar.setMnemonic(KeyEvent.VK_S);
+        mnuItemStatusBar.addItemListener(new ItemListener() {
             @Override
-	    public void itemStateChanged(ItemEvent e) {
-		statusBar.setVisible(!statusBar.isVisible());
-	    }
-	});
+            public void itemStateChanged(ItemEvent e) {
+                statusBar.setVisible(!statusBar.isVisible());
+            }
+        });
 
-	mnuView.add(mnuItemStatusBar);
+        mnuView.add(mnuItemStatusBar);
 
-	return mnuView;
+        return mnuView;
     }
 
     private JMenu buildHelpMenu() {
-	JMenu mnuHelp = new JMenu("Help");
-	mnuHelp.setMnemonic(KeyEvent.VK_H);
+        JMenu mnuHelp = new JMenu("Help");
+        mnuHelp.setMnemonic(KeyEvent.VK_H);
 
-	JMenuItem mnuItemHelpAbout = new JMenuItem("About " + Main.PROGRAM_NAME + "...", KeyEvent.VK_A);
-	mnuItemHelpAbout.setIcon(new ImageIcon(Datazuul.class.getResource("images/Help16.gif")));
-	mnuItemHelpAbout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
-	mnuItemHelpAbout.addActionListener(new ActionListener() {
+        JMenuItem mnuItemHelpAbout = new JMenuItem("About " + Main.PROGRAM_NAME + "...", KeyEvent.VK_A);
+        mnuItemHelpAbout.setIcon(new ImageIcon(Datazuul.class.getResource("images/Help16.gif")));
+        mnuItemHelpAbout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+        mnuItemHelpAbout.addActionListener(new ActionListener() {
             @Override
-	    public void actionPerformed(ActionEvent e) {
-		new AboutDialog(mainWindow).setVisible(true);
-	    }
+            public void actionPerformed(ActionEvent e) {
+                new AboutDialog(mainWindow).setVisible(true);
+            }
 
-	});
+        });
 
-	mnuHelp.add(mnuItemHelpAbout);
+        mnuHelp.add(mnuItemHelpAbout);
 
-	return mnuHelp;
+        return mnuHelp;
     }
 
     private JPanel buildMainPanel() {
-	JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new BorderLayout());
 
-	panel.add(this.buildTextArea(), BorderLayout.CENTER);
-	panel.add(this.buildStatusBar(), BorderLayout.SOUTH);
+        panel.add(this.buildTextArea(), BorderLayout.CENTER);
+        panel.add(this.buildStatusBar(), BorderLayout.SOUTH);
 
-	return panel;
+        return panel;
     }
 
     private JScrollPane buildTextArea() {
-	this.txtArea = new JTextArea();
-	this.txtArea.setDragEnabled(true);
-	this.txtArea.setMargin(new Insets(4, 4, 4, 4));
+        this.txtArea = new JTextArea();
+        this.txtArea.setDragEnabled(true);
+        this.txtArea.setMargin(new Insets(4, 4, 4, 4));
 
-	JScrollPane scrollPane = new JScrollPane(this.txtArea);
-	scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-	// scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        JScrollPane scrollPane = new JScrollPane(this.txtArea);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        // scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-	return scrollPane;
+        return scrollPane;
     }
 
     private JPanel buildStatusBar() {
-	this.statusBar = new JPanel(new BorderLayout());
+        this.statusBar = new JPanel(new BorderLayout());
 
-	EmptyBorder innerBorder = new EmptyBorder(5, 5, 5, 5);
-	BevelBorder outerBorder = new BevelBorder(BevelBorder.LOWERED);
+        EmptyBorder innerBorder = new EmptyBorder(5, 5, 5, 5);
+        BevelBorder outerBorder = new BevelBorder(BevelBorder.LOWERED);
 
-	this.statusLabelLeft = new JLabel(Main.PROGRAM_NAME + " by Ralf Eichinger");
-	this.statusLabelLeft.setBorder(new CompoundBorder(outerBorder, innerBorder));
-	this.statusLabelRight = new JLabel("Line 1, Column 1");
-	this.statusLabelRight.setBorder(new CompoundBorder(outerBorder, innerBorder));
+        this.statusLabelLeft = new JLabel(Main.PROGRAM_NAME + " by Ralf Eichinger");
+        this.statusLabelLeft.setBorder(new CompoundBorder(outerBorder, innerBorder));
+        this.statusLabelRight = new JLabel("Line 1, Column 1");
+        this.statusLabelRight.setBorder(new CompoundBorder(outerBorder, innerBorder));
 
-	this.statusBar.add(statusLabelLeft, BorderLayout.CENTER);
-	this.statusBar.add(statusLabelRight, BorderLayout.EAST);
+        this.statusBar.add(statusLabelLeft, BorderLayout.CENTER);
+        this.statusBar.add(statusLabelRight, BorderLayout.EAST);
 
-	return this.statusBar;
+        return this.statusBar;
     }
 
     private int dialogConfirmSaveFile() {
-	String filename = (this.file == null) ? "Untitled" : this.file.getName();
-	String question = "The text in the " + filename + " file has changed.\nDo you want to save the changes?";
-	int response = JOptionPane.showConfirmDialog(this.mainWindow, question, "File Modified",
-		JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+        String filename = (this.file == null) ? "Untitled" : this.file.getName();
+        String question = "The text in the " + filename + " file has changed.\nDo you want to save the changes?";
+        int response = JOptionPane.showConfirmDialog(this.mainWindow, question, "File Modified",
+                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
-	return response;
+        return response;
     }
 
     private boolean isModified() {
-	return getCurrentLength() != originalLength;
+        return getCurrentLength() != originalLength;
     }
 
     public void windowClosed(WindowEvent e) {
-	this.updateWindowList();
+        this.updateWindowList();
     }
 
     public void windowClosing(WindowEvent e) {
-	this.updateWindowList();
+        this.updateWindowList();
     }
 
     private void updateWindowList() {
-	// this.windowList.remove(this);
-	// if (this.windowList.isEmpty()) {
-	dispose();
-	// }
+        // this.windowList.remove(this);
+        // if (this.windowList.isEmpty()) {
+        dispose();
+        // }
     }
 
     @Override
@@ -609,13 +610,13 @@ public class MainWindow extends JFrame implements WindowListener {
     }
 
     private int getCurrentLength() {
-	return txtArea.getText().length();
+        return txtArea.getText().length();
     }
 
     public int dialogAskForOverwrite() {
-	Object[] options = { "Yes", "No" };
-	int wasnun = JOptionPane.showOptionDialog(null, "The file already exists.\nDo you want to overwrite it?",
-		"Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-	return wasnun;
+        Object[] options = {"Yes", "No"};
+        int wasnun = JOptionPane.showOptionDialog(null, "The file already exists.\nDo you want to overwrite it?",
+                "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+        return wasnun;
     }
 }

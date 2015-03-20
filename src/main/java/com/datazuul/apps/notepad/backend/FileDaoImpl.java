@@ -9,42 +9,43 @@ import java.io.IOException;
 public class FileDaoImpl implements FileDao {
 
     public FileDaoImpl() {
-	super();
+        super();
     }
 
+    @Override
     public char[] read(File file) {
-	char[] data = null;
+        char[] data = null;
 
-	FileReader fin = null;
-	try {
-	    fin = new FileReader(file);
-	    int filesize = (int) file.length();
-	    data = new char[filesize];
-	    fin.read(data, 0, filesize);
-	} catch (FileNotFoundException e) {
-	    e.printStackTrace();
-	} catch (IOException e) {
-	    e.printStackTrace();
-	} finally {
-	    try {
-		fin.close();
-	    } catch (IOException e) {
-		e.printStackTrace();
-	    }
-	}
+        FileReader fin = null;
+        try {
+            fin = new FileReader(file);
+            int filesize = (int) file.length();
+            data = new char[filesize];
+            fin.read(data, 0, filesize);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fin.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
-	return data;
+        return data;
     }
 
     @Override
     public void save(File file, String text) {
-	try {
-	    FileWriter fw = new FileWriter(file);
-	    int textsize = text.length();
-	    fw.write(text, 0, textsize);
-	    fw.close();
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
+        try {
+            FileWriter fw = new FileWriter(file);
+            int textsize = text.length();
+            fw.write(text, 0, textsize);
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
